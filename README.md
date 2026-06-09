@@ -1,14 +1,38 @@
 # Creator Image Resizer
 
-A small React + FastAPI MVP for resizing and converting images locally in the browser.
+A browser-first image resizing and conversion tool for creators.
+
+Live demo: https://creator-image-resizer-beta.vercel.app/
+
+Upload an image, resize it manually or with platform presets, convert it to PNG/JPEG/WebP, and download the result. Image processing happens locally in the browser with Canvas. User images are not uploaded or stored on the server.
 
 ## What it does
 
 - Drag and drop or pick an image.
 - Preview the image and original file details.
 - Resize with optional aspect ratio locking.
+- Apply platform presets for social media, developer, and game creator image sizes.
 - Export as PNG, JPEG, or WebP.
-- Process images locally with Canvas. Images are not uploaded to the server.
+- Adjust JPEG/WebP output quality.
+- Process images locally with Canvas.
+
+## Privacy
+
+Images are processed locally in the browser. The backend does not receive, upload, or store user images.
+
+## Current scope
+
+- Supported input types: PNG, JPEG, WebP.
+- Maximum image size: 40 megapixels.
+- Live2D features are intentionally not implemented yet.
+- The backend is only a health check API for future expansion.
+
+## Project structure
+
+```text
+frontend/   React + Vite app
+backend/    FastAPI health check
+```
 
 ## Frontend
 
@@ -33,6 +57,14 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 The backend currently exposes only:
 
 - `GET /health`
+
+## Vercel
+
+This repository is configured for Vercel through `vercel.json`.
+
+- Install command: `cd frontend && npm install`
+- Build command: `cd frontend && npm run build`
+- Output directory: `frontend/dist`
 
 ## Docker
 
