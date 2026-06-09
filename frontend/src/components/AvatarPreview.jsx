@@ -4,7 +4,7 @@ function AvatarPreview() {
   const inputRef = useRef(null);
   const [imageUrl, setImageUrl] = useState('');
   const [error, setError] = useState('');
-  const [idleFloating, setIdleFloating] = useState(true);
+  const [idleFloating, setIdleFloating] = useState(false);
   const [mouseFollow, setMouseFollow] = useState(true);
   const [blinkEffect, setBlinkEffect] = useState(false);
   const [pointerOffset, setPointerOffset] = useState({ x: 0, y: 0 });
@@ -37,7 +37,7 @@ function AvatarPreview() {
     }
 
     if (file.type !== 'image/png') {
-      setError('Unsupported file type. Please upload a transparent PNG image.');
+      setError('Unsupported file type. Please upload a PNG image.');
       return;
     }
 
@@ -110,7 +110,7 @@ function AvatarPreview() {
               />
             ) : (
               <div className="avatar-placeholder">
-                <p>Upload a transparent PNG character image</p>
+                <p>Upload a PNG character image</p>
                 <span>Simple motion effects will preview here.</span>
               </div>
             )}
@@ -132,7 +132,7 @@ function AvatarPreview() {
             <button type="button" className="primary-button wide-button" onClick={() => inputRef.current?.click()}>
               Choose PNG image
             </button>
-            <p className="avatar-help">Transparent PNG works best. This preview only applies browser motion effects.</p>
+            <p className="avatar-help">Transparent PNGs work best, but non-transparent PNGs are supported.</p>
           </section>
 
           <section className="panel control-panel">
@@ -145,7 +145,7 @@ function AvatarPreview() {
                 checked={idleFloating}
                 onChange={(event) => setIdleFloating(event.target.checked)}
               />
-              <span>Idle floating</span>
+              <span>Subtle breathing motion</span>
             </label>
             <label className="toggle-row">
               <input
@@ -178,4 +178,3 @@ function AvatarPreview() {
 }
 
 export default AvatarPreview;
-

@@ -301,7 +301,7 @@ h3 {
 }
 
 .avatar-image.is-floating {
-  animation: avatarFloat 4.8s ease-in-out infinite;
+  animation: avatarFloat 7.2s ease-in-out infinite;
 }
 
 .avatar-image.has-blink {
@@ -310,7 +310,7 @@ h3 {
 
 .avatar-image.is-floating.has-blink {
   animation:
-    avatarFloat 4.8s ease-in-out infinite,
+    avatarFloat 7.2s ease-in-out infinite,
     avatarBlink 4.6s ease-in-out infinite;
 }
 
@@ -327,7 +327,7 @@ h3 {
   }
 
   50% {
-    translate: 0 -12px;
+    translate: 0 -3px;
   }
 }
 

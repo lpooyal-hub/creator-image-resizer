@@ -6,7 +6,7 @@ Live demo: https://creator-image-resizer-beta.vercel.app/
 
 Upload an image, resize it manually or with platform presets, convert it to PNG/JPEG/WebP, and download the result. Image processing happens locally in the browser with Canvas. User images are not uploaded or stored on the server.
 
-The app also includes an experimental Avatar Preview page for testing simple browser motion effects on transparent PNG character images. It does not create Live2D models.
+The app also includes an experimental Avatar Preview page for testing simple browser motion effects on PNG character images. Transparent PNGs work best, but it does not create Live2D models.
 
 ## What it does
 
