@@ -6,6 +6,8 @@ Live demo: https://creator-image-resizer-beta.vercel.app/
 
 Upload an image, resize it manually or with platform presets, convert it to PNG/JPEG/WebP, and download the result. Image processing happens locally in the browser with Canvas. User images are not uploaded or stored on the server.
 
+The app also includes an experimental Avatar Preview page for testing simple browser motion effects on transparent PNG character images. It does not create Live2D models.
+
 ## What it does
 
 - Drag and drop or pick an image.
@@ -15,6 +17,7 @@ Upload an image, resize it manually or with platform presets, convert it to PNG/
 - Export as PNG, JPEG, or WebP.
 - Adjust JPEG/WebP output quality.
 - Process images locally with Canvas.
+- Preview simple avatar motion effects on a separate experimental page.
 
 ## Privacy
 
@@ -25,6 +28,7 @@ Images are processed locally in the browser. The backend does not receive, uploa
 - Supported input types: PNG, JPEG, WebP.
 - Maximum image size: 40 megapixels.
 - Live2D features are intentionally not implemented yet.
+- Avatar Preview is a visual preview only. It does not generate rigged models.
 - The backend is only a health check API for future expansion.
 
 ## Project structure

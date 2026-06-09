@@ -84,6 +84,31 @@ h3 {
   font-size: 1.08rem;
 }
 
+.page-tabs {
+  display: inline-flex;
+  gap: 6px;
+  margin: 0 0 22px;
+  padding: 5px;
+  border: 1px solid rgba(30, 48, 42, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.page-tabs button {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 6px;
+  background: transparent;
+  color: #52625c;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.page-tabs button.is-active {
+  background: #203f35;
+  color: white;
+}
+
 .uploader,
 .panel {
   border: 1px solid rgba(30, 48, 42, 0.12);
@@ -129,6 +154,21 @@ h3 {
   font-weight: 800;
 }
 
+.secondary-button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(30, 48, 42, 0.18);
+  border-radius: 6px;
+  background: white;
+  color: #203f35;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.secondary-button:hover {
+  background: #eef5ef;
+}
+
 .primary-button:hover:not(:disabled) {
   background: #285244;
 }
@@ -154,6 +194,20 @@ h3 {
   color: #244939;
 }
 
+.experiment-notice {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: rgba(43, 84, 118, 0.1);
+  color: #274a64;
+  font-weight: 800;
+}
+
+.notice-stack {
+  display: grid;
+  gap: 12px;
+}
+
 .error-message {
   background: rgba(178, 57, 57, 0.11);
   color: #8d2424;
@@ -167,9 +221,130 @@ h3 {
   margin-top: 22px;
 }
 
+.avatar-page {
+  display: grid;
+  gap: 22px;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.8fr);
+  gap: 20px;
+}
+
 .preview-panel,
 .control-panel {
   padding: 20px;
+}
+
+.avatar-stage-panel {
+  min-height: 540px;
+  padding: 20px;
+}
+
+.avatar-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 500px;
+  border-radius: 6px;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(47, 99, 79, 0.12), transparent 34%),
+    linear-gradient(45deg, #edf1ed 25%, transparent 25%),
+    linear-gradient(-45deg, #edf1ed 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #edf1ed 75%),
+    linear-gradient(-45deg, transparent 75%, #edf1ed 75%),
+    #ffffff;
+  background-position:
+    center,
+    0 0,
+    0 12px,
+    12px -12px,
+    -12px 0;
+  background-size:
+    auto,
+    24px 24px,
+    24px 24px,
+    24px 24px,
+    24px 24px;
+  overflow: hidden;
+}
+
+.avatar-placeholder {
+  display: grid;
+  gap: 6px;
+  padding: 24px;
+  color: #60706a;
+  text-align: center;
+}
+
+.avatar-placeholder p {
+  margin-bottom: 0;
+  color: #203f35;
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.avatar-placeholder span {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.avatar-image {
+  display: block;
+  max-width: min(78%, 420px);
+  max-height: 440px;
+  object-fit: contain;
+  transform: translate3d(var(--avatar-x, 0), var(--avatar-y, 0), 0);
+  transition: transform 160ms ease-out;
+  filter: drop-shadow(0 22px 28px rgba(18, 30, 25, 0.18));
+}
+
+.avatar-image.is-floating {
+  animation: avatarFloat 4.8s ease-in-out infinite;
+}
+
+.avatar-image.has-blink {
+  animation: avatarBlink 4.6s ease-in-out infinite;
+}
+
+.avatar-image.is-floating.has-blink {
+  animation:
+    avatarFloat 4.8s ease-in-out infinite,
+    avatarBlink 4.6s ease-in-out infinite;
+}
+
+.avatar-help {
+  margin: 14px 0 0;
+  color: #64736d;
+  font-size: 0.92rem;
+}
+
+@keyframes avatarFloat {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -12px;
+  }
+}
+
+@keyframes avatarBlink {
+  0%,
+  88%,
+  100% {
+    opacity: 1;
+  }
+
+  91% {
+    opacity: 0.62;
+  }
+
+  94% {
+    opacity: 1;
+  }
 }
 
 .preview-panel {
@@ -392,8 +567,24 @@ input[type='range'] {
     grid-template-columns: 1fr;
   }
 
+  .avatar-grid {
+    grid-template-columns: 1fr;
+  }
+
   .preview-panel {
     min-height: 360px;
+  }
+
+  .avatar-stage-panel {
+    min-height: 420px;
+  }
+
+  .avatar-stage {
+    min-height: 380px;
+  }
+
+  .avatar-image {
+    max-height: 340px;
   }
 
   .info-grid {
@@ -408,8 +599,14 @@ input[type='range'] {
   }
 
   .preview-panel,
+  .avatar-stage-panel,
   .control-panel,
   .uploader {
     padding: 16px;
+  }
+
+  .page-tabs {
+    display: grid;
+    width: 100%;
   }
 }
