@@ -1,0 +1,46 @@
+function DownloadPanel({
+  format,
+  quality,
+  outputInfo,
+  isExporting,
+  disabled,
+  onFormatChange,
+  onQualityChange,
+  onDownload,
+}) {
+  const qualityDisabled = disabled || format === 'png';
+
+  return (
+    <section className="panel control-panel">
+      <div className="panel-heading">
+        <h2>Export</h2>
+      </div>
+      <label>
+        <span>Format</span>
+        <select value={format} disabled={disabled} onChange={(event) => onFormatChange(event.target.value)}>
+          <option value="png">PNG</option>
+          <option value="jpeg">JPEG</option>
+          <option value="webp">WebP</option>
+        </select>
+      </label>
+      <label className={qualityDisabled ? 'disabled-field' : ''}>
+        <span>Quality {format === 'png' ? '(not used for PNG)' : `${quality}%`}</span>
+        <input
+          type="range"
+          min="1"
+          max="100"
+          value={quality}
+          disabled={qualityDisabled}
+          onChange={(event) => onQualityChange(Number(event.target.value))}
+        />
+      </label>
+      {outputInfo ? <p className="output-note">Last export: {outputInfo}</p> : null}
+      <button type="button" className="primary-button wide-button" disabled={disabled || isExporting} onClick={onDownload}>
+        {isExporting ? 'Preparing...' : 'Download resized image'}
+      </button>
+    </section>
+  );
+}
+
+export default DownloadPanel;
+
