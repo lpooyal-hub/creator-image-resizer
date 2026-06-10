@@ -534,6 +534,59 @@ input[type='range'] {
   color: #83918b;
 }
 
+.mode-fieldset {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 16px;
+  border: 0;
+  padding: 0;
+}
+
+.mode-fieldset:disabled {
+  opacity: 0.56;
+}
+
+.mode-fieldset legend {
+  margin-bottom: 2px;
+  color: #33453f;
+  font-weight: 800;
+}
+
+.mode-options {
+  display: grid;
+  gap: 8px;
+}
+
+.mode-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(30, 48, 42, 0.14);
+  border-radius: 6px;
+  background: #f8faf7;
+}
+
+.mode-option input {
+  width: 16px;
+  min-height: 16px;
+  margin-top: 4px;
+  accent-color: #2f634f;
+}
+
+.mode-option span {
+  display: grid;
+  gap: 2px;
+}
+
+.mode-option small {
+  color: #697970;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .output-note {
   margin-bottom: 16px;
   color: #40534c;

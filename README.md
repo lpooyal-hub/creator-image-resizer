@@ -16,6 +16,7 @@ The app also includes an experimental Avatar Preview page for testing simple bro
 - Apply platform presets for social media, developer, and game creator image sizes.
 - Export as PNG, JPEG, or WebP.
 - Adjust JPEG/WebP output quality.
+- Choose Fit, Fill, or Stretch output behavior to avoid accidental distortion.
 - Process images locally with Canvas.
 - Preview simple avatar motion effects on a separate experimental page.
 

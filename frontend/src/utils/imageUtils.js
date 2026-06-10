@@ -70,8 +70,80 @@ export function validateDimensions(width, height) {
   return '';
 }
 
+function getDrawRect(image, width, height, resizeMode) {
+  if (resizeMode === 'stretch') {
+    return {
+      sourceX: 0,
+      sourceY: 0,
+      sourceWidth: image.naturalWidth,
+      sourceHeight: image.naturalHeight,
+      targetX: 0,
+      targetY: 0,
+      targetWidth: width,
+      targetHeight: height,
+    };
+  }
+
+  const sourceRatio = image.naturalWidth / image.naturalHeight;
+  const targetRatio = width / height;
+
+  if (resizeMode === 'fill') {
+    if (sourceRatio > targetRatio) {
+      const sourceWidth = image.naturalHeight * targetRatio;
+      return {
+        sourceX: (image.naturalWidth - sourceWidth) / 2,
+        sourceY: 0,
+        sourceWidth,
+        sourceHeight: image.naturalHeight,
+        targetX: 0,
+        targetY: 0,
+        targetWidth: width,
+        targetHeight: height,
+      };
+    }
+
+    const sourceHeight = image.naturalWidth / targetRatio;
+    return {
+      sourceX: 0,
+      sourceY: (image.naturalHeight - sourceHeight) / 2,
+      sourceWidth: image.naturalWidth,
+      sourceHeight,
+      targetX: 0,
+      targetY: 0,
+      targetWidth: width,
+      targetHeight: height,
+    };
+  }
+
+  if (sourceRatio > targetRatio) {
+    const targetHeight = width / sourceRatio;
+    return {
+      sourceX: 0,
+      sourceY: 0,
+      sourceWidth: image.naturalWidth,
+      sourceHeight: image.naturalHeight,
+      targetX: 0,
+      targetY: (height - targetHeight) / 2,
+      targetWidth: width,
+      targetHeight,
+    };
+  }
+
+  const targetWidth = height * sourceRatio;
+  return {
+    sourceX: 0,
+    sourceY: 0,
+    sourceWidth: image.naturalWidth,
+    sourceHeight: image.naturalHeight,
+    targetX: (width - targetWidth) / 2,
+    targetY: 0,
+    targetWidth,
+    targetHeight: height,
+  };
+}
+
 export function resizeImageToBlob(image, options) {
-  const { width, height, format, quality } = options;
+  const { width, height, format, quality, resizeMode = 'fit' } = options;
   const mimeType = getOutputMimeType(format);
 
   return new Promise((resolve, reject) => {
@@ -87,7 +159,24 @@ export function resizeImageToBlob(image, options) {
 
     context.imageSmoothingEnabled = true;
     context.imageSmoothingQuality = 'high';
-    context.drawImage(image, 0, 0, width, height);
+
+    if (resizeMode === 'fit' && format !== 'png') {
+      context.fillStyle = '#ffffff';
+      context.fillRect(0, 0, width, height);
+    }
+
+    const drawRect = getDrawRect(image, width, height, resizeMode);
+    context.drawImage(
+      image,
+      drawRect.sourceX,
+      drawRect.sourceY,
+      drawRect.sourceWidth,
+      drawRect.sourceHeight,
+      drawRect.targetX,
+      drawRect.targetY,
+      drawRect.targetWidth,
+      drawRect.targetHeight,
+    );
 
     const encoderQuality = format === 'png' ? undefined : quality / 100;
     canvas.toBlob(
@@ -104,4 +193,3 @@ export function resizeImageToBlob(image, options) {
     );
   });
 }
-

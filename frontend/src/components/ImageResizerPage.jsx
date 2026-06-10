@@ -26,6 +26,7 @@ function ImageResizerPage() {
   const [maintainAspectRatio, setMaintainAspectRatio] = useState(true);
   const [format, setFormat] = useState('webp');
   const [quality, setQuality] = useState(86);
+  const [resizeMode, setResizeMode] = useState('fit');
   const [selectedPresetId, setSelectedPresetId] = useState('');
   const [error, setError] = useState('');
   const [outputInfo, setOutputInfo] = useState('');
@@ -150,7 +151,7 @@ function ImageResizerPage() {
     setError('');
 
     try {
-      const blob = await resizeImageToBlob(loadedImage, { width, height, format, quality });
+      const blob = await resizeImageToBlob(loadedImage, { width, height, format, quality, resizeMode });
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
@@ -159,7 +160,7 @@ function ImageResizerPage() {
       link.click();
       link.remove();
       URL.revokeObjectURL(downloadUrl);
-      setOutputInfo(`${width} x ${height}, ${format.toUpperCase()}, ${formatBytes(blob.size)}`);
+      setOutputInfo(`${width} x ${height}, ${format.toUpperCase()}, ${resizeMode}, ${formatBytes(blob.size)}`);
     } catch (downloadError) {
       setError(downloadError.message);
     } finally {
@@ -197,6 +198,7 @@ function ImageResizerPage() {
           <DownloadPanel
             format={format}
             quality={quality}
+            resizeMode={resizeMode}
             outputInfo={outputInfo}
             isExporting={isExporting}
             disabled={!imageInfo}
@@ -208,6 +210,10 @@ function ImageResizerPage() {
               resetOutput();
               setQuality(value);
             }}
+            onResizeModeChange={(value) => {
+              resetOutput();
+              setResizeMode(value);
+            }}
             onDownload={downloadImage}
           />
         </div>
@@ -217,4 +223,3 @@ function ImageResizerPage() {
 }
 
 export default ImageResizerPage;
-
