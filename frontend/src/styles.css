@@ -594,6 +594,71 @@ input[type='range'] {
   font-weight: 700;
 }
 
+.export-preview-panel {
+  padding: 20px;
+}
+
+.export-preview-frame {
+  display: grid;
+  place-items: center;
+  min-height: 210px;
+  margin-bottom: 14px;
+  border-radius: 6px;
+  background:
+    linear-gradient(45deg, #edf1ed 25%, transparent 25%),
+    linear-gradient(-45deg, #edf1ed 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #edf1ed 75%),
+    linear-gradient(-45deg, transparent 75%, #edf1ed 75%),
+    #ffffff;
+  background-position:
+    0 0,
+    0 12px,
+    12px -12px,
+    -12px 0;
+  background-size: 24px 24px;
+  overflow: hidden;
+}
+
+.export-preview-frame img {
+  display: block;
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+.export-preview-empty {
+  display: grid;
+  gap: 6px;
+  padding: 20px;
+  color: #65756f;
+  text-align: center;
+}
+
+.export-preview-empty p {
+  margin-bottom: 0;
+  color: #203f35;
+  font-weight: 900;
+}
+
+.export-preview-empty span {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.preview-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.preview-summary div {
+  min-width: 0;
+  padding: 10px;
+  border-radius: 6px;
+  background: #f0f4ef;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -653,6 +718,7 @@ input[type='range'] {
 
   .preview-panel,
   .avatar-stage-panel,
+  .export-preview-panel,
   .control-panel,
   .uploader {
     padding: 16px;

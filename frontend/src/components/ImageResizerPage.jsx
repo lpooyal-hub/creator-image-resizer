@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import DownloadPanel from './DownloadPanel.jsx';
+import ExportPreview from './ExportPreview.jsx';
 import ImagePreview from './ImagePreview.jsx';
 import ImageUploader from './ImageUploader.jsx';
 import PresetSelector from './PresetSelector.jsx';
@@ -31,6 +32,8 @@ function ImageResizerPage() {
   const [error, setError] = useState('');
   const [outputInfo, setOutputInfo] = useState('');
   const [isExporting, setIsExporting] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const [exportPreview, setExportPreview] = useState(null);
 
   const aspectRatio = useMemo(() => {
     if (!imageInfo?.width || !imageInfo?.height) {
@@ -48,7 +51,30 @@ function ImageResizerPage() {
     };
   }, [imageUrl]);
 
+  useEffect(() => {
+    return () => {
+      if (exportPreview?.url) {
+        URL.revokeObjectURL(exportPreview.url);
+      }
+    };
+  }, [exportPreview]);
+
   const resetOutput = () => setOutputInfo('');
+
+  const resetPreview = () => {
+    setExportPreview((currentPreview) => {
+      if (currentPreview?.url) {
+        URL.revokeObjectURL(currentPreview.url);
+      }
+
+      return null;
+    });
+  };
+
+  const resetExportState = () => {
+    resetOutput();
+    resetPreview();
+  };
 
   const clearPresetSelection = () => setSelectedPresetId('');
 
@@ -85,7 +111,7 @@ function ImageResizerPage() {
       setResizeSize(getInitialResizeSize(image.naturalWidth, image.naturalHeight));
       clearPresetSelection();
       setError('');
-      resetOutput();
+      resetExportState();
     } catch {
       URL.revokeObjectURL(nextUrl);
       setError('Image load failed. Please try another file.');
@@ -93,7 +119,7 @@ function ImageResizerPage() {
   };
 
   const updateWidth = (value) => {
-    resetOutput();
+    resetExportState();
     clearPresetSelection();
     if (!maintainAspectRatio || !value) {
       setResizeSize((current) => ({ ...current, width: value }));
@@ -108,7 +134,7 @@ function ImageResizerPage() {
   };
 
   const updateHeight = (value) => {
-    resetOutput();
+    resetExportState();
     clearPresetSelection();
     if (!maintainAspectRatio || !value) {
       setResizeSize((current) => ({ ...current, height: value }));
@@ -123,7 +149,7 @@ function ImageResizerPage() {
   };
 
   const applyPreset = (preset) => {
-    resetOutput();
+    resetExportState();
     setError('');
     setMaintainAspectRatio(false);
     setSelectedPresetId(preset.id);
@@ -133,17 +159,67 @@ function ImageResizerPage() {
     });
   };
 
-  const downloadImage = async () => {
+  const getValidatedExportOptions = () => {
     if (!loadedImage || !selectedFile) {
-      setError('Please upload an image first.');
-      return;
+      return { errorMessage: 'Please upload an image first.' };
     }
 
     const width = Number(resizeSize.width);
     const height = Number(resizeSize.height);
     const dimensionError = validateDimensions(width, height);
     if (dimensionError) {
-      setError(dimensionError);
+      return { errorMessage: dimensionError };
+    }
+
+    return {
+      options: {
+        width,
+        height,
+        format,
+        quality,
+        resizeMode,
+      },
+    };
+  };
+
+  const generateExportPreview = async () => {
+    const { errorMessage, options } = getValidatedExportOptions();
+    if (errorMessage) {
+      setError(errorMessage);
+      return;
+    }
+
+    setIsPreviewing(true);
+    setError('');
+
+    try {
+      const blob = await resizeImageToBlob(loadedImage, options);
+      const previewUrl = URL.createObjectURL(blob);
+      setExportPreview((currentPreview) => {
+        if (currentPreview?.url) {
+          URL.revokeObjectURL(currentPreview.url);
+        }
+
+        return {
+          url: previewUrl,
+          byteSize: blob.size,
+          width: options.width,
+          height: options.height,
+          format: options.format,
+          resizeMode: options.resizeMode,
+        };
+      });
+    } catch (previewError) {
+      setError(previewError.message);
+    } finally {
+      setIsPreviewing(false);
+    }
+  };
+
+  const downloadImage = async () => {
+    const { errorMessage, options } = getValidatedExportOptions();
+    if (errorMessage) {
+      setError(errorMessage);
       return;
     }
 
@@ -151,16 +227,18 @@ function ImageResizerPage() {
     setError('');
 
     try {
-      const blob = await resizeImageToBlob(loadedImage, { width, height, format, quality, resizeMode });
+      const blob = await resizeImageToBlob(loadedImage, options);
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.download = `${sanitizeBaseName(selectedFile.name)}-${width}x${height}.${getFileExtension(format)}`;
+      link.download = `${sanitizeBaseName(selectedFile.name)}-${options.width}x${options.height}.${getFileExtension(format)}`;
       document.body.appendChild(link);
       link.click();
       link.remove();
       URL.revokeObjectURL(downloadUrl);
-      setOutputInfo(`${width} x ${height}, ${format.toUpperCase()}, ${resizeMode}, ${formatBytes(blob.size)}`);
+      setOutputInfo(
+        `${options.width} x ${options.height}, ${format.toUpperCase()}, ${resizeMode}, ${formatBytes(blob.size)}`,
+      );
     } catch (downloadError) {
       setError(downloadError.message);
     } finally {
@@ -203,18 +281,24 @@ function ImageResizerPage() {
             isExporting={isExporting}
             disabled={!imageInfo}
             onFormatChange={(value) => {
-              resetOutput();
+              resetExportState();
               setFormat(value);
             }}
             onQualityChange={(value) => {
-              resetOutput();
+              resetExportState();
               setQuality(value);
             }}
             onResizeModeChange={(value) => {
-              resetOutput();
+              resetExportState();
               setResizeMode(value);
             }}
             onDownload={downloadImage}
+          />
+          <ExportPreview
+            preview={exportPreview}
+            isPreviewing={isPreviewing}
+            disabled={!imageInfo}
+            onGeneratePreview={generateExportPreview}
           />
         </div>
       </div>
