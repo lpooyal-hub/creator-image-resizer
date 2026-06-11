@@ -10,11 +10,10 @@ import {
   MAX_PIXEL_COUNT,
   createImageFromUrl,
   formatBytes,
-  getFileExtension,
+  getDownloadFileName,
   getInitialResizeSize,
   getEffectiveBackgroundColor,
   resizeImageToBlob,
-  sanitizeBaseName,
   validateDimensions,
   validateImageFile,
 } from '../utils/imageUtils.js';
@@ -30,6 +29,7 @@ function ImageResizerPage() {
   const [quality, setQuality] = useState(86);
   const [resizeMode, setResizeMode] = useState('fit');
   const [backgroundColor, setBackgroundColor] = useState('transparent');
+  const [outputFileName, setOutputFileName] = useState('');
   const [selectedPresetId, setSelectedPresetId] = useState('');
   const [error, setError] = useState('');
   const [outputInfo, setOutputInfo] = useState('');
@@ -211,6 +211,7 @@ function ImageResizerPage() {
           format: options.format,
           resizeMode: options.resizeMode,
           backgroundColor: getEffectiveBackgroundColor(options.format, options.backgroundColor),
+          fileName: getDownloadFileName(selectedFile.name, options.width, options.height, options.format, outputFileName),
           blob,
         };
       });
@@ -243,7 +244,7 @@ function ImageResizerPage() {
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.download = `${sanitizeBaseName(selectedFile.name)}-${options.width}x${options.height}.${getFileExtension(format)}`;
+      link.download = getDownloadFileName(selectedFile.name, options.width, options.height, format, outputFileName);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -252,7 +253,7 @@ function ImageResizerPage() {
         `${options.width} x ${options.height}, ${format.toUpperCase()}, ${resizeMode}, ${getEffectiveBackgroundColor(
           options.format,
           options.backgroundColor,
-        )}, ${formatBytes(blob.size)}`,
+        )}, ${link.download}, ${formatBytes(blob.size)}`,
       );
     } catch (downloadError) {
       setError(downloadError.message);
@@ -293,6 +294,7 @@ function ImageResizerPage() {
             quality={quality}
             resizeMode={resizeMode}
             backgroundColor={backgroundColor}
+            fileName={outputFileName}
             outputInfo={outputInfo}
             isExporting={isExporting}
             disabled={!imageInfo}
@@ -311,6 +313,10 @@ function ImageResizerPage() {
             onBackgroundColorChange={(value) => {
               resetExportState();
               setBackgroundColor(value);
+            }}
+            onFileNameChange={(value) => {
+              resetExportState();
+              setOutputFileName(value);
             }}
             onDownload={downloadImage}
           />

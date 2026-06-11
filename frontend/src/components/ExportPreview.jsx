@@ -40,6 +40,10 @@ function ExportPreview({ preview, isPreviewing, disabled, onGeneratePreview }) {
             <dt>Background</dt>
             <dd>{preview.backgroundColor}</dd>
           </div>
+          <div>
+            <dt>Filename</dt>
+            <dd>{preview.fileName}</dd>
+          </div>
         </dl>
       ) : null}
       <button

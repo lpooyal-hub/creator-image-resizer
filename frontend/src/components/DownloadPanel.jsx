@@ -3,6 +3,7 @@ function DownloadPanel({
   quality,
   resizeMode,
   backgroundColor,
+  fileName,
   outputInfo,
   isExporting,
   disabled,
@@ -10,6 +11,7 @@ function DownloadPanel({
   onQualityChange,
   onResizeModeChange,
   onBackgroundColorChange,
+  onFileNameChange,
   onDownload,
 }) {
   const qualityDisabled = disabled || format === 'png';
@@ -123,6 +125,16 @@ function DownloadPanel({
           Used only when Fit creates empty space. Transparent is available for PNG exports.
         </p>
       </fieldset>
+      <label>
+        <span>Output filename</span>
+        <input
+          type="text"
+          value={fileName}
+          disabled={disabled}
+          placeholder="Leave blank to use the original filename"
+          onChange={(event) => onFileNameChange(event.target.value)}
+        />
+      </label>
       {outputInfo ? <p className="output-note">Last export: {outputInfo}</p> : null}
       <button type="button" className="primary-button wide-button" disabled={disabled || isExporting} onClick={onDownload}>
         {isExporting ? 'Preparing...' : 'Download resized image'}

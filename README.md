@@ -19,6 +19,7 @@ The app also includes an experimental Avatar Preview page for testing simple bro
 - Choose Fit, Fill, or Stretch output behavior to avoid accidental distortion.
 - Choose the background color used by Fit mode.
 - Generate an export preview before downloading.
+- Set a custom output filename.
 - Process images locally with Canvas.
 - Preview simple avatar motion effects on a separate experimental page.
 

@@ -58,6 +58,11 @@ export function sanitizeBaseName(fileName) {
   return baseName.replace(/[^a-z0-9-_]+/gi, '-').replace(/^-+|-+$/g, '') || 'resized-image';
 }
 
+export function getDownloadFileName(fileName, width, height, format, customBaseName = '') {
+  const baseName = sanitizeBaseName(customBaseName || fileName);
+  return `${baseName}-${width}x${height}.${getFileExtension(format)}`;
+}
+
 export function getEffectiveBackgroundColor(format, backgroundColor) {
   if (backgroundColor === 'transparent' && format === 'png') {
     return 'transparent';
