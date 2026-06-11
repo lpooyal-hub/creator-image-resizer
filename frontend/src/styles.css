@@ -587,6 +587,68 @@ input[type='range'] {
   line-height: 1.35;
 }
 
+.background-options {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.swatch-button {
+  width: 36px;
+  min-height: 36px;
+  border: 1px solid rgba(30, 48, 42, 0.18);
+  border-radius: 6px;
+  background: var(--swatch-color);
+  cursor: pointer;
+}
+
+.swatch-button.is-selected {
+  outline: 3px solid rgba(47, 99, 79, 0.28);
+  border-color: #2f634f;
+}
+
+.swatch-button:disabled {
+  cursor: not-allowed;
+}
+
+.swatch-transparent {
+  background:
+    linear-gradient(45deg, #dce3df 25%, transparent 25%),
+    linear-gradient(-45deg, #dce3df 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #dce3df 75%),
+    linear-gradient(-45deg, transparent 75%, #dce3df 75%),
+    #ffffff;
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0;
+  background-size: 16px 16px;
+}
+
+.custom-color-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #40534c;
+  font-size: 0.86rem;
+}
+
+.custom-color-label input {
+  width: 40px;
+  min-height: 36px;
+  padding: 3px;
+}
+
+.field-note {
+  margin: 0;
+  color: #697970;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .output-note {
   margin-bottom: 16px;
   color: #40534c;

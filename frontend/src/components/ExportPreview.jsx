@@ -36,6 +36,10 @@ function ExportPreview({ preview, isPreviewing, disabled, onGeneratePreview }) {
             <dt>File size</dt>
             <dd>{formatBytes(preview.byteSize)}</dd>
           </div>
+          <div>
+            <dt>Background</dt>
+            <dd>{preview.backgroundColor}</dd>
+          </div>
         </dl>
       ) : null}
       <button
@@ -51,4 +55,3 @@ function ExportPreview({ preview, isPreviewing, disabled, onGeneratePreview }) {
 }
 
 export default ExportPreview;
-

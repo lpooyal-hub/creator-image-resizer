@@ -58,6 +58,18 @@ export function sanitizeBaseName(fileName) {
   return baseName.replace(/[^a-z0-9-_]+/gi, '-').replace(/^-+|-+$/g, '') || 'resized-image';
 }
 
+export function getEffectiveBackgroundColor(format, backgroundColor) {
+  if (backgroundColor === 'transparent' && format === 'png') {
+    return 'transparent';
+  }
+
+  if (backgroundColor === 'transparent') {
+    return '#ffffff';
+  }
+
+  return backgroundColor;
+}
+
 export function validateDimensions(width, height) {
   if (!Number.isInteger(width) || !Number.isInteger(height) || width <= 0 || height <= 0) {
     return 'Width and height must be positive whole numbers.';
@@ -143,8 +155,9 @@ function getDrawRect(image, width, height, resizeMode) {
 }
 
 export function resizeImageToBlob(image, options) {
-  const { width, height, format, quality, resizeMode = 'fit' } = options;
+  const { width, height, format, quality, resizeMode = 'fit', backgroundColor = 'transparent' } = options;
   const mimeType = getOutputMimeType(format);
+  const effectiveBackgroundColor = getEffectiveBackgroundColor(format, backgroundColor);
 
   return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');
@@ -160,8 +173,8 @@ export function resizeImageToBlob(image, options) {
     context.imageSmoothingEnabled = true;
     context.imageSmoothingQuality = 'high';
 
-    if (resizeMode === 'fit' && format !== 'png') {
-      context.fillStyle = '#ffffff';
+    if (resizeMode === 'fit' && effectiveBackgroundColor !== 'transparent') {
+      context.fillStyle = effectiveBackgroundColor;
       context.fillRect(0, 0, width, height);
     }
 

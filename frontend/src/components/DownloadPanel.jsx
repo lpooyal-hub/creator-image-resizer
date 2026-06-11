@@ -2,15 +2,18 @@ function DownloadPanel({
   format,
   quality,
   resizeMode,
+  backgroundColor,
   outputInfo,
   isExporting,
   disabled,
   onFormatChange,
   onQualityChange,
   onResizeModeChange,
+  onBackgroundColorChange,
   onDownload,
 }) {
   const qualityDisabled = disabled || format === 'png';
+  const backgroundDisabled = disabled || resizeMode !== 'fit';
 
   return (
     <section className="panel control-panel">
@@ -79,6 +82,46 @@ function DownloadPanel({
             </span>
           </label>
         </div>
+      </fieldset>
+      <fieldset className="mode-fieldset" disabled={backgroundDisabled}>
+        <legend>Fit background</legend>
+        <div className="background-options">
+          <button
+            type="button"
+            className={`swatch-button swatch-transparent ${backgroundColor === 'transparent' ? 'is-selected' : ''}`}
+            disabled={backgroundDisabled}
+            onClick={() => onBackgroundColorChange('transparent')}
+            aria-label="Transparent background"
+          />
+          <button
+            type="button"
+            className={`swatch-button ${backgroundColor === '#ffffff' ? 'is-selected' : ''}`}
+            disabled={backgroundDisabled}
+            onClick={() => onBackgroundColorChange('#ffffff')}
+            style={{ '--swatch-color': '#ffffff' }}
+            aria-label="White background"
+          />
+          <button
+            type="button"
+            className={`swatch-button ${backgroundColor === '#111827' ? 'is-selected' : ''}`}
+            disabled={backgroundDisabled}
+            onClick={() => onBackgroundColorChange('#111827')}
+            style={{ '--swatch-color': '#111827' }}
+            aria-label="Dark background"
+          />
+          <label className="custom-color-label">
+            <span>Custom</span>
+            <input
+              type="color"
+              value={backgroundColor === 'transparent' ? '#ffffff' : backgroundColor}
+              disabled={backgroundDisabled}
+              onChange={(event) => onBackgroundColorChange(event.target.value)}
+            />
+          </label>
+        </div>
+        <p className="field-note">
+          Used only when Fit creates empty space. Transparent is available for PNG exports.
+        </p>
       </fieldset>
       {outputInfo ? <p className="output-note">Last export: {outputInfo}</p> : null}
       <button type="button" className="primary-button wide-button" disabled={disabled || isExporting} onClick={onDownload}>

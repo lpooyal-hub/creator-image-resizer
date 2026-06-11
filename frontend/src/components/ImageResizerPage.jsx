@@ -12,6 +12,7 @@ import {
   formatBytes,
   getFileExtension,
   getInitialResizeSize,
+  getEffectiveBackgroundColor,
   resizeImageToBlob,
   sanitizeBaseName,
   validateDimensions,
@@ -28,6 +29,7 @@ function ImageResizerPage() {
   const [format, setFormat] = useState('webp');
   const [quality, setQuality] = useState(86);
   const [resizeMode, setResizeMode] = useState('fit');
+  const [backgroundColor, setBackgroundColor] = useState('transparent');
   const [selectedPresetId, setSelectedPresetId] = useState('');
   const [error, setError] = useState('');
   const [outputInfo, setOutputInfo] = useState('');
@@ -178,6 +180,7 @@ function ImageResizerPage() {
         format,
         quality,
         resizeMode,
+        backgroundColor,
       },
     };
   };
@@ -207,6 +210,8 @@ function ImageResizerPage() {
           height: options.height,
           format: options.format,
           resizeMode: options.resizeMode,
+          backgroundColor: getEffectiveBackgroundColor(options.format, options.backgroundColor),
+          blob,
         };
       });
     } catch (previewError) {
@@ -227,7 +232,14 @@ function ImageResizerPage() {
     setError('');
 
     try {
-      const blob = await resizeImageToBlob(loadedImage, options);
+      const canReusePreview =
+        exportPreview?.blob &&
+        exportPreview.width === options.width &&
+        exportPreview.height === options.height &&
+        exportPreview.format === options.format &&
+        exportPreview.resizeMode === options.resizeMode &&
+        exportPreview.backgroundColor === getEffectiveBackgroundColor(options.format, options.backgroundColor);
+      const blob = canReusePreview ? exportPreview.blob : await resizeImageToBlob(loadedImage, options);
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
@@ -237,7 +249,10 @@ function ImageResizerPage() {
       link.remove();
       URL.revokeObjectURL(downloadUrl);
       setOutputInfo(
-        `${options.width} x ${options.height}, ${format.toUpperCase()}, ${resizeMode}, ${formatBytes(blob.size)}`,
+        `${options.width} x ${options.height}, ${format.toUpperCase()}, ${resizeMode}, ${getEffectiveBackgroundColor(
+          options.format,
+          options.backgroundColor,
+        )}, ${formatBytes(blob.size)}`,
       );
     } catch (downloadError) {
       setError(downloadError.message);
@@ -277,6 +292,7 @@ function ImageResizerPage() {
             format={format}
             quality={quality}
             resizeMode={resizeMode}
+            backgroundColor={backgroundColor}
             outputInfo={outputInfo}
             isExporting={isExporting}
             disabled={!imageInfo}
@@ -291,6 +307,10 @@ function ImageResizerPage() {
             onResizeModeChange={(value) => {
               resetExportState();
               setResizeMode(value);
+            }}
+            onBackgroundColorChange={(value) => {
+              resetExportState();
+              setBackgroundColor(value);
             }}
             onDownload={downloadImage}
           />
