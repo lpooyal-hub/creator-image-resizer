@@ -3,10 +3,11 @@ export const IMAGE_PRESET_GROUPS = [
     id: 'social-media',
     label: 'Social media',
     presets: [
-      { id: 'instagram-square', label: 'Instagram Square', width: 1080, height: 1080 },
+      { id: 'instagram-square', slug: 'instagram-profile-resizer', label: 'Instagram Square', width: 1080, height: 1080 },
       { id: 'instagram-story', label: 'Instagram Story', width: 1080, height: 1920 },
-      { id: 'youtube-thumbnail', label: 'YouTube Thumbnail', width: 1280, height: 720 },
-      { id: 'x-twitter-header', label: 'X/Twitter Header', width: 1500, height: 500 },
+      { id: 'youtube-thumbnail', slug: 'youtube-thumbnail-resizer', label: 'YouTube Thumbnail', width: 1280, height: 720 },
+      { id: 'x-twitter-header', slug: 'twitter-header-resizer', label: 'X/Twitter Header', width: 1500, height: 500 },
+      { id: 'discord-pfp', slug: 'discord-pfp-resizer', label: 'Discord Profile Picture', width: 512, height: 512 },
     ],
   },
   {
@@ -26,4 +27,15 @@ export const IMAGE_PRESET_GROUPS = [
     ],
   },
 ];
+
+export function findPresetById(presetId) {
+  for (const group of IMAGE_PRESET_GROUPS) {
+    const preset = group.presets.find((item) => item.id === presetId);
+    if (preset) {
+      return preset;
+    }
+  }
+
+  return null;
+}
 

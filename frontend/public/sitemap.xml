@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://creator-image-resizer-beta.vercel.app/</loc>
+  </url>
+  <url>
+    <loc>https://creator-image-resizer-beta.vercel.app/background-remover</loc>
+  </url>
+  <url>
+    <loc>https://creator-image-resizer-beta.vercel.app/youtube-thumbnail-resizer</loc>
+  </url>
+  <url>
+    <loc>https://creator-image-resizer-beta.vercel.app/instagram-profile-resizer</loc>
+  </url>
+  <url>
+    <loc>https://creator-image-resizer-beta.vercel.app/twitter-header-resizer</loc>
+  </url>
+  <url>
+    <loc>https://creator-image-resizer-beta.vercel.app/discord-pfp-resizer</loc>
+  </url>
+</urlset>
