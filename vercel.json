@@ -3,9 +3,10 @@
   "installCommand": "cd frontend && npm install",
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/dist",
+  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!background-remover|youtube-thumbnail-resizer|instagram-profile-resizer|twitter-header-resizer|discord-pfp-resizer|sitemap.xml|robots.txt|assets/|models/).*)",
       "destination": "/index.html"
     }
   ]

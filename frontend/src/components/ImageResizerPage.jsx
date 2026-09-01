@@ -5,6 +5,7 @@ import ImagePreview from './ImagePreview.jsx';
 import ImageUploader from './ImageUploader.jsx';
 import PresetSelector from './PresetSelector.jsx';
 import ResizeControls from './ResizeControls.jsx';
+import { findPresetById } from '../utils/imagePresets.js';
 import {
   ACCEPTED_IMAGE_TYPES,
   MAX_PIXEL_COUNT,
@@ -18,7 +19,7 @@ import {
   validateImageFile,
 } from '../utils/imageUtils.js';
 
-function ImageResizerPage() {
+function ImageResizerPage({ initialPresetId }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [loadedImage, setLoadedImage] = useState(null);
@@ -101,6 +102,8 @@ function ImageResizerPage() {
         URL.revokeObjectURL(imageUrl);
       }
 
+      const landingPreset = initialPresetId ? findPresetById(initialPresetId) : null;
+
       setSelectedFile(file);
       setImageUrl(nextUrl);
       setLoadedImage(image);
@@ -110,8 +113,16 @@ function ImageResizerPage() {
         size: file.size,
         type: file.type,
       });
-      setResizeSize(getInitialResizeSize(image.naturalWidth, image.naturalHeight));
-      clearPresetSelection();
+
+      if (landingPreset) {
+        setMaintainAspectRatio(false);
+        setSelectedPresetId(landingPreset.id);
+        setResizeSize({ width: String(landingPreset.width), height: String(landingPreset.height) });
+      } else {
+        setResizeSize(getInitialResizeSize(image.naturalWidth, image.naturalHeight));
+        clearPresetSelection();
+      }
+
       setError('');
       resetExportState();
     } catch {
